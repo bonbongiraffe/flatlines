@@ -31,9 +31,6 @@ class Flight(Base):
             f'origin: {self.origin}' + \
             f'destination: {self.destination}'
     
-    
-
-    
 
 class Reservation(Base):
     __tablename__ = 'reservations'
