@@ -31,7 +31,7 @@ if __name__ == '__main__':
         user_input = input('>> ')
         #creating reservation
         if user_input == 'create':
-            pass:
+            pass
             print("For returning users, please enter your first and last name exactly as you did for previous reservations.")
             first_name = input("Please enter your first name: ")
             last_name = input("Please enter your last name: ")

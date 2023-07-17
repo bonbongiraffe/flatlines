@@ -1,6 +1,9 @@
 from sqlalchemy import ForeignKey, Column, Integer, String, MetaData
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
 
 Base = declarative_base()
 
@@ -12,8 +15,8 @@ class Passenger(Base):
     last_name = Column( String() )
 
     def __repr__( self ):
-        return f'id: {self.id}' + /
-            f'first_name: {self.first_name}' + /
+        return f'id: {self.id}' + \
+            f'first_name: {self.first_name}' + \
             f'last_name: {self.last_name}' 
 
 class Flight(Base):
@@ -24,18 +27,13 @@ class Flight(Base):
     destination = Column( String() )
 
     def __repr__( self ):
-        return f'id: {self.id}' + / 
-            f'origin: {self.origin}' + /
+        return f'id: {self.id}' + \
+            f'origin: {self.origin}' + \
             f'destination: {self.destination}'
+    
+    
 
-# generate twenty mvp flights:
-# airport_dict = {"New York City": "JFK", "Chicago": "ORD", "Miami": "MIA", "Denver": "DEN", "Los Angeles": "LAX"}
-# for origin in airport_dict:
-#   for destination in airport_dict:
-#       if destination != origin:
-#           CREATE flight object with:
-#           origin = airport_dict[origin]
-#           destination = airport_dict[destination]      
+    
 
 class Reservation(Base):
     __tablename__ = 'reservations'
@@ -45,7 +43,12 @@ class Reservation(Base):
     flight_id = Column( Integer(), ForeignKey('flights.id') )
 
     def __repr__( self ):
-        return f'id: {self.id}' + /
-            f'passenger_id: {self.passenger_id}' + /
+        return f'id: {self.id}' + \
+            f'passenger_id: {self.passenger_id}' + \
             f'flight_id: {self.flight_id}'
+    
+
+
+
+
 
