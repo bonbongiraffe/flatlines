@@ -2,11 +2,14 @@
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
 from models import Passenger, Flight, Reservation
+from sqlalchemy.ext.declarative import declarative_base
+
+Base = declarative_base()
 
 if __name__ == '__main__':
     engine = create_engine('sqlite:///airline.db')
+    Base.metadata.create_all(engine)
     Session = sessionmaker(bind=engine)
     session = Session()
 
@@ -54,15 +57,18 @@ if __name__ == '__main__':
         else:
             new_passenger = Passenger(first_name = first_name, last_name = last_name)
             session.add(new_passenger)
-            session.commit
+            session.commit()
             print(f"Welcome to Flat-lines, {first_name} {last_name}.")
         current_passenger = session.query(Passenger).filter_by(first_name = first_name, last_name = last_name).all()  
-        #import ipdb; ipdb.set_trace()
+        import ipdb; ipdb.set_trace()
+
+        #LATER:
         origin = input("Where are you flying from?: ")
         destination = input("Where would you like to fly to?: ")
             #with origin and destination match user to a flight_id
         current_flight = session.query(Flight).filter_by(origin = origin, destination = destination).all()
         print(seating_chart)
+        #NEED: notify user of which seats are available or already taken
         seat_num = input("Please enter your desired seat number: ")
             #CREATE reservation object (passenger_id, flight_id, seat_number)
         new_reservation = Reservation(passenger_id = current_passenger.id, flight_id = current_flight.id, seat_number = seat_number)
