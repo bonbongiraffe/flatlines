@@ -2,31 +2,49 @@
 import ipdb
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
-from models import Passenger, Flight, Reservation
-
-Base = declarative_base()
-
-if __name__ == '__main__':
-    engine = create_engine('sqlite:///airline.db')
-    Base.metadata.create_all(engine)
-    Session = sessionmaker(bind=engine)
-    session = Session()
+from models import Passenger, Flight, Reservation, session, Pilot
 
 #ASSETS:
 from assets import logo, seat_legend, airport_dict
 cities = airport_dict[0].keys()
 airports = airport_dict[0].values()
 
+#Validations:
+def validate_string(input=""):
+    special_characters = """ "!@#$%^&*()-=_+[]}{\|/?.>,<`~';: """
+    if input == "":
+        print("Input cannot be empty string.")
+        return False
+    if any(c in special_characters for c in input):
+        print("Input cannot contain special characters.")
+        return False
+    elif input.isdigit():
+        print("Input cannot contain numbers.")
+        return False
+    else: 
+        return True
+
+def validate_name(name=""):
+    if not validate_string(name):
+        return False
+    elif 2 <= len(name) <= 12:
+        print("Name must be between 2 and 12 characters.")
+        return False
+    else:
+        return True
+
 #MAIN menu
 def main_menu():
     menu_dict = {
             "c": create_reservation,
-            "e": edit_reservation
+            "e": edit_reservation,
+            "p": register_pilot
         }
     print("""
         Please select from the following menu options:
         c - create a new reservation
         e - edit an existing reservation
+        p - register as new pilot
         x - exit 
         """)
     while True:
@@ -41,17 +59,30 @@ def main_menu():
 
 #CREATE reservation
 def create_reservation():
+    #prompt user for name
     print("For returning users, please enter your first and last name exactly as you did for previous reservations. *Not case sensitive")
-    first_name = input("Please enter your first name: ").rstrip().lower()
-    last_name = input("Please enter your last name: ").rstrip().lower()
+    while True:
+        first_name = input("Please enter your first name: ")
+        if validate_name(first_name):
+            first_name = first_name.rstrip().lower()
+            break
+    while True: 
+        last_name = input("Please enter your last name: ")
+        if validate_name(last_name):
+            last_name = last_name.rstrip().lower()
+            break
+    #welcome back: for existing customers
     if len(session.query(Passenger).filter_by(first_name = first_name, last_name = last_name).all()) == 1:
         print(f"Welcome back {first_name.capitalize()} {last_name.capitalize()}.")
+    #welcome to: for new customers
     else:
         new_passenger = Passenger(first_name = first_name, last_name = last_name)
         session.add(new_passenger)
         session.commit()
         print(f"Welcome to Flat-lines, {first_name.capitalize()} {last_name.capitalize()}.")
+    #set current passenger
     current_passenger = session.query(Passenger).filter_by(first_name = first_name, last_name = last_name).all()[0]
+    #select ORIGIN:
     print("\nFlight Origin.")
     for city in cities:
         print(f'-{city}')
@@ -167,11 +198,29 @@ x - To exit to main menu
     #NEED: loop if user didn't enter 'e' or 'CANCEL'
     #NEED: loop to starting menu
 
+#REGISTER new pilot
+def register_pilot():
+    if user_input == 'const [torture, setTorture] = useState(SqlAlchemy)':
+        print ("We see that you have gained the secret password.... and you have successfully joined flatiron airlines!")
+        print("enter your first name, last name, and a personal id number.")
+        first_name = input("Enter First Name: ")
+        last_name = input("Enter Last Name: ")
+        id = input("Enter id number: ")
+
+        new_pilot = Pilot(first_name = first_name, last_name = last_name, id = id)
+        session.add(new_pilot)
+        session.commit()
+
 if __name__ == '__main__':
     print(f"""
     ----------------------
     Welcome to Flat-lines!
     {logo}
-    ----------------------    
+    ----------------------
     """)
     main_menu()
+    
+
+
+
+   

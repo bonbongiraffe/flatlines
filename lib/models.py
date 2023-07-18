@@ -8,6 +8,11 @@ from assets import airport_dict
 
 Base = declarative_base()
 
+engine = create_engine('sqlite:///airline.db')
+Session = sessionmaker(bind=engine)
+session = Session()
+
+
 class Passenger(Base):
     __tablename__ = 'passengers'
 
@@ -27,6 +32,7 @@ class Flight(Base):
     __tablename__ = 'flights'
 
     id = Column( Integer(), primary_key = True )
+    pilot_id = Column(Integer(), ForeignKey('pilots.id'))
     origin = Column( String() )
     destination = Column( String() )
 
@@ -60,7 +66,8 @@ class Flight(Base):
     def __repr__( self ):
         return f'(id: {self.id}, ' + \
             f'origin: {self.origin}, ' + \
-            f'destination: {self.destination})'
+            f'destination: {self.destination}' + \
+            f'pilot: {self.pilot}'
     
 
 class Reservation(Base):
@@ -100,6 +107,23 @@ class Reservation(Base):
             f'passenger_id: {self.passenger_id}, ' + \
             f'flight_id: {self.flight_id}, ' + \
             f'seat_number: {self.seat_number})'
+    
+class Pilot(Base):
+    __tablename__ = 'pilots'
+
+    id = Column(Integer, primary_key = True)
+    first_name = Column(String(), )
+    last_name = Column(String(), )
+
+    flights = relationship('Flight', backref= 'pilot')
+    
+
+
+    def __repr__(self): 
+        return f'<Pilot id: {self.id}, ' + \
+            f'first_name: {self.first_name} '+ \
+            f'last_name: {self.last_name} ' + \
+            f'flights: {self.flights}>'
     
 
 
