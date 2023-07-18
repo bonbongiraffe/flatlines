@@ -12,8 +12,8 @@ class Passenger(Base):
     last_name = Column( String() )
 
     def __repr__( self ):
-        return f'id: {self.id}' + /
-            f'first_name: {self.first_name}' + /
+        return f'id: {self.id}, ' + \
+            f'first_name: {self.first_name}, ' + \
             f'last_name: {self.last_name}' 
 
 class Flight(Base):
@@ -24,8 +24,8 @@ class Flight(Base):
     destination = Column( String() )
 
     def __repr__( self ):
-        return f'id: {self.id}' + / 
-            f'origin: {self.origin}' + /
+        return f'id: {self.id}, ' + \
+            f'origin: {self.origin}, ' + \
             f'destination: {self.destination}'
 
 # generate twenty mvp flights:
@@ -45,7 +45,7 @@ class Reservation(Base):
     flight_id = Column( Integer(), ForeignKey('flights.id') )
 
     def __repr__( self ):
-        return f'id: {self.id}' + /
-            f'passenger_id: {self.passenger_id}' + /
+        return f'id: {self.id}, ' + \
+            f'passenger_id: {self.passenger_id}, ' + \
             f'flight_id: {self.flight_id}'
 
