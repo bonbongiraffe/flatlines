@@ -21,15 +21,17 @@ if __name__ == '__main__':
 # need to generate flights to/from every airport
 # 20 flights, 4 out of each airport
 
-# SEATING CHART
-# W = Window
-# A = Aisle
-#
-# W | 01 02 | A | 03 04 | W
-# W | 05 06 | A | 07 08 | W
-# W | 09 10 | A | 11 12 | W
-# W | 13 14 | A | 15 16 | W
-# W | 17 18 | A | 19 20 | W
+seating_chart = """
+SEATING CHART
+W = Window
+A = Aisle
+
+W | 01 02 | A | 03 04 | W
+W | 05 06 | A | 07 08 | W
+W | 09 10 | A | 11 12 | W
+W | 13 14 | A | 15 16 | W
+W | 17 18 | A | 19 20 | W
+"""
 
 #NEED TO UPDATE WITH KEYS FROM AIRPORT DICT
 cities = ["New York City", "Denver", "Los Angeles", "Miami", "Chicago"]
@@ -59,10 +61,15 @@ if __name__ == '__main__':
         origin = input("Where are you flying from?: ")
         destination = input("Where would you like to fly to?: ")
             #with origin and destination match user to a flight_id
-        #print seating chart for user
-        #prompt user for seat number
+        current_flight = session.query(Flight).filter_by(origin = origin, destination = destination).all()
+        print(seating_chart)
+        seat_num = input("Please enter your desired seat number: ")
             #CREATE reservation object (passenger_id, flight_id, seat_number)
+        new_reservation = Reservation(passenger_id = current_passenger.id, flight_id = current_flight.id, seat_number = seat_number)
         #return reservation_id to user
+        session.add(new_reservation)
+        session.commit()
+        print(f"Your reservation number is ...")
 
     #editing existing reservation
     if user_input == 1234:
