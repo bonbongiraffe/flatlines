@@ -4,7 +4,6 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-
 Base = declarative_base()
 
 class Passenger(Base):
@@ -38,11 +37,13 @@ class Reservation(Base):
     id = Column( Integer(), primary_key = True )
     passenger_id = Column( Integer(), ForeignKey('passengers.id') )
     flight_id = Column( Integer(), ForeignKey('flights.id') )
+    seat_number = Column( Integer() )
 
     def __repr__( self ):
         return f'id: {self.id}, ' + \
             f'passenger_id: {self.passenger_id}, ' + \
-            f'flight_id: {self.flight_id}'
+            f'flight_id: {self.flight_id}, ' + \
+            f'seat_number: {self.seat_number}'
     
 
 

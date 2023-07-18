@@ -2,11 +2,14 @@
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
 from models import Passenger, Flight, Reservation
+from sqlalchemy.ext.declarative import declarative_base
+
+Base = declarative_base()
 
 if __name__ == '__main__':
     engine = create_engine('sqlite:///airline.db')
+    Base.metadata.create_all(engine)
     Session = sessionmaker(bind=engine)
     session = Session()
 
@@ -21,18 +24,22 @@ if __name__ == '__main__':
 # need to generate flights to/from every airport
 # 20 flights, 4 out of each airport
 
-# SEATING CHART
-# W = Window
-# A = Aisle
-#
-# W | 01 02 | A | 03 04 | W
-# W | 05 06 | A | 07 08 | W
-# W | 09 10 | A | 11 12 | W
-# W | 13 14 | A | 15 16 | W
-# W | 17 18 | A | 19 20 | W
+seating_chart = """
+SEATING CHART
+W = Window
+A = Aisle
+
+W | 01 02 | A | 03 04 | W
+W | 05 06 | A | 07 08 | W
+W | 09 10 | A | 11 12 | W
+W | 13 14 | A | 15 16 | W
+W | 17 18 | A | 19 20 | W
+"""
 
 #NEED TO UPDATE WITH KEYS FROM AIRPORT DICT
-cities = ["New York City", "Denver", "Los Angeles", "Miami", "Chicago"]
+from flights import airport_dict
+cities = airport_dict.keys()
+#["New York City", "Denver", "Los Angeles", "Miami", "Chicago"]
 
 if __name__ == '__main__':
     print("Welcome to Flat-lines!")
@@ -52,17 +59,37 @@ if __name__ == '__main__':
         else:
             new_passenger = Passenger(first_name = first_name, last_name = last_name)
             session.add(new_passenger)
-            session.commit
+            session.commit()
             print(f"Welcome to Flat-lines, {first_name} {last_name}.")
-        current_passenger = session.query(Passenger).filter_by(first_name = first_name, last_name = last_name).all()  
-        #import ipdb; ipdb.set_trace()
+        current_passenger = session.query(Passenger).filter_by(first_name = first_name, last_name = last_name).all()[0]
+
+        #NEED: add loop for if user enters invalid city name
+        
+        for city in cities:
+            print(city)
         origin = input("Where are you flying from?: ")
+
+        #NEED: add loop for if user enters invalid city name
+        
+        for city in cities:
+            if city != origin:
+                print(city)
         destination = input("Where would you like to fly to?: ")
-            #with origin and destination match user to a flight_id
-        #print seating chart for user
-        #prompt user for seat number
-            #CREATE reservation object (passenger_id, flight_id, seat_number)
-        #return reservation_id to user
+
+        current_flight = session.query(Flight).filter_by(origin = origin, destination = destination).all()[0]
+        print(current_flight)
+        print(seating_chart)
+        #NEED: notify user of which seats are available or already taken
+        seat_number = input("Please enter your desired seat number: ")
+        # import ipdb; ipdb.set_trace()
+
+
+        new_reservation = Reservation(passenger_id = current_passenger.id, flight_id = current_flight.id, seat_number = seat_number)    
+        print(new_reservation)
+        session.add(new_reservation)
+        session.commit()
+        print(f"Your reservation id is {new_reservation.id}. Thank you for flying with Flatlines!")
+        
 
     #editing existing reservation
     if user_input == 1234:
