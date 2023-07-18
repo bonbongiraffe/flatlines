@@ -3,7 +3,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from models import Game, Review
+from models import Passenger, Flight, Reservation
 
 if __name__ == '__main__':
     engine = create_engine('sqlite:///airline.db')
