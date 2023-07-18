@@ -32,9 +32,12 @@ if __name__ == '__main__':
         #creating reservation
         if user_input == 'create':
             pass:
-            #prompt user for first name
-            #prompt user for last name
-                #CREATE passenger object (first name, last name)
+            print("For returning users, please enter your first and last name exactly as you did for previous reservations.")
+            first_name = input("Please enter your first name: ")
+            last_name = input("Please enter your last name: ")
+            #set passenger_id 
+                #CREATE passenger object (first name, last name), IF user doesn't already exist in db
+                #pull existing passenger object from db
             #prompt user for origin 
             #prompt user for destination
                 #with origin and destination match user to a flight_id
