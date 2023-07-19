@@ -4,11 +4,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 from models import Passenger, Flight, Reservation, session, Pilot
 
-
-
-
-
-
 #ASSETS:
 from assets import logo, seat_legend, airport_dict
 cities = airport_dict[0].keys()
@@ -32,7 +27,7 @@ def validate_string(input=""):
 def validate_name(name=""):
     if not validate_string(name):
         return False
-    elif 2 >= len(name) >= 12:
+    elif 2 <= len(name) <= 12:
         print("Name must be between 2 and 12 characters.")
         return False
     else:
@@ -42,12 +37,14 @@ def validate_name(name=""):
 def main_menu():
     menu_dict = {
             "c": create_reservation,
-            "e": edit_reservation
+            "e": edit_reservation,
+            "p": register_pilot
         }
     print("""
         Please select from the following menu options:
         c - create a new reservation
         e - edit an existing reservation
+        p - register as new pilot
         x - exit 
         """)
     while True:
@@ -165,14 +162,8 @@ def edit_reservation():
     #NEED: loop if user didn't enter 'e' or 'CANCEL'
     #NEED: loop to starting menu
 
-if __name__ == '__main__':
-    print(f"""
-    ----------------------
-    Welcome to Flat-lines!
-    {logo}
-    ----------------------
-    """)
-    main_menu()
+#REGISTER new pilot
+def register_pilot():
     if user_input == 'const [torture, setTorture] = useState(SqlAlchemy)':
         print ("We see that you have gained the secret password.... and you have successfully joined flatiron airlines!")
         print("enter your first name, last name, and a personal id number.")
@@ -184,6 +175,14 @@ if __name__ == '__main__':
         session.add(new_pilot)
         session.commit()
 
+if __name__ == '__main__':
+    print(f"""
+    ----------------------
+    Welcome to Flat-lines!
+    {logo}
+    ----------------------
+    """)
+    main_menu()
     
 
 
