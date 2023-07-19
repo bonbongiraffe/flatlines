@@ -2,7 +2,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from assets import *
-from models import Passenger, Flight, Reservation
+from models import Passenger, Flight, Reservation, Pilot
 
 if __name__ == '__main__':
     engine = create_engine('sqlite:///airline.db')
