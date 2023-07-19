@@ -17,6 +17,30 @@ from assets import logo, seat_legend, airport_dict
 cities = airport_dict[0].keys()
 airports = airport_dict[0].values()
 
+#Validations:
+def validate_string(input=""):
+    special_characters = """ "!@#$%^&*()-=_+[]}{\|/?.>,<`~';: """
+    if input == "":
+        print("Input cannot be empty string.")
+        return False
+    if any(c in special_characters for c in input):
+        print("Input cannot contain special characters.")
+        return False
+    elif input.isdigit():
+        print("Input cannot contain numbers.")
+        return False
+    else: 
+        return True
+
+def validate_name(name=""):
+    if not validate_string(name):
+        return False
+    elif 2 >= len(name) >= 12:
+        print("Name must be between 2 and 12 characters.")
+        return False
+    else:
+        return True
+
 #MAIN menu
 def main_menu():
     menu_dict = {
@@ -41,17 +65,30 @@ def main_menu():
 
 #CREATE reservation
 def create_reservation():
+    #prompt user for name
     print("For returning users, please enter your first and last name exactly as you did for previous reservations. *Not case sensitive")
-    first_name = input("Please enter your first name: ").rstrip().lower()
-    last_name = input("Please enter your last name: ").rstrip().lower()
+    while True:
+        first_name = input("Please enter your first name: ")
+        if validate_name(first_name):
+            first_name = first_name.rstrip().lower()
+            break
+    while True: 
+        last_name = input("Please enter your last name: ")
+        if validate_name(last_name):
+            last_name = last_name.rstrip().lower()
+            break
+    #welcome back: for existing customers
     if len(session.query(Passenger).filter_by(first_name = first_name, last_name = last_name).all()) == 1:
         print(f"Welcome back {first_name.capitalize()} {last_name.capitalize()}.")
+    #welcome to: for new customers
     else:
         new_passenger = Passenger(first_name = first_name, last_name = last_name)
         session.add(new_passenger)
         session.commit()
         print(f"Welcome to Flat-lines, {first_name.capitalize()} {last_name.capitalize()}.")
+    #set current passenger
     current_passenger = session.query(Passenger).filter_by(first_name = first_name, last_name = last_name).all()[0]
+    #select ORIGIN:
     print("\nFlight Origin.")
     for city in cities:
         print(f'-{city}')
