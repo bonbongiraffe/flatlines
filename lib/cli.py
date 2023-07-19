@@ -122,11 +122,16 @@ def create_reservation():
 
 #EDIT reservation
 def edit_reservation():
+    while True:
     #prompt user for reservation number
-    reservation_number = input("Please enter your reservation number: ")
-    current_reservation = session.query(Reservation).filter_by(id=reservation_number).first()
+        reservation_number = input("Please enter your reservation number (or 'x' to return to the main menu): ")
+        if reservation_number == 'x':
+            return
+        current_reservation = session.query(Reservation).filter_by(id=reservation_number).first()
+        if not current_reservation:
+            print("Reservation not found. Please enter a valid reservation number.")
+            continue
     #fetch current_passenger... <-- reservation.passenger_id
-    if current_reservation:
         current_passenger = session.query(Passenger).filter_by(id=current_reservation.passenger_id).first()
     #fetch current_flight... <-- reservation.flight_id
         current_flight = session.query(Flight).filter_by(id=current_reservation.flight_id).first()
@@ -135,29 +140,60 @@ def edit_reservation():
         print(f"Flight Origin: {current_flight.origin}")
         print(f"Flight Destination: {current_flight.destination}")
         print(f"Seat Number: {current_reservation.seat_number}")
+
+        while True:
     #prompt user with options: CANCEL or EDIT
-        user_input = input("To edit, please enter 'e'. To cancel reservation, please enter 'CANCEL'")
-        if user_input == 'e':
+            user_input = input("""
+e - To edit your reservation
+CANCEL - To cancel your reservation
+x - To exit to main menu 
+                               """)
+            if user_input == 'e':
         #EDIT
         #display seating chart
-            print(seat_legend)
-            print(current_flight.seat_chart)
+                print(seat_legend)
+                print(current_flight.seat_chart)
+
+                while True:
         #prompt user for new seat number
-            new_seat_number = input("Please enter the new seat number: ")
-            current_reservation.seat_number = new_seat_number
-            session.commit()
-            print('Seat number updated successfully')
-    if user_input == 'CANCEL':
+                    new_seat_number = input("Please enter the new seat number: ")
+
+                    if not new_seat_number.isdigit():
+                        print("Invalid seat number. Seat number should contain only numbers. Please try again.")
+                        continue
+                    new_seat_number = int(new_seat_number)
+
+                    total_seats = 20
+                    if new_seat_number < 1 or new_seat_number > total_seats:
+                        print("Invalid seat number. Seat number should be between 1 and 20. Please try again.")
+                    else:
+                        current_reservation.seat_number = f"{new_seat_number:02d}"
+                        session.commit()
+                        print("Seat number updated successfully")
+                        break
+
+            elif user_input == 'CANCEL':
         #CANCEL
         #prompt user "are you sure? y/n"
-        confirmation = input('Are you sure you want to cancel this reservation ? (y/n): ')
-        if confirmation.lower() == 'y':
+                while True:
+                    confirmation = input('Are you sure you want to cancel this reservation ? (y/n): ')
+                    if confirmation.lower() == 'y':
         #delete if y
-            session.delete(current_reservation)
-            session.commit()
-            print("Reservation canceled successfully.")
-        else:
-            print("Reservation cancellation canceled.")
+                        session.delete(current_reservation)
+                        session.commit()
+                        print("Reservation canceled successfully.")
+                        break
+                    elif confirmation.lower() == 'n':
+                        print("Reservation cancellation canceled")
+                        break
+                    else:
+                        print("Invalid input. Please enter 'y' for Yes or 'n' for No.")
+            elif user_input == 'x':
+                return
+            else:
+                print("Invalid input. Please enter 'e', 'CANCEL' or 'x' to return to the main menu.")
+                    
+           
         #return to options if n
     #NEED: loop if user didn't enter 'e' or 'CANCEL'
     #NEED: loop to starting menu
