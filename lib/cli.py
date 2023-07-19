@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 from models import Passenger, Flight, Reservation, session, Pilot
 
 #ASSETS:
-from assets import logo, seat_legend, airport_dict
+from assets import *
 cities = airport_dict[0].keys()
 airports = airport_dict[0].values()
 
@@ -84,8 +84,7 @@ def create_reservation():
     current_passenger = session.query(Passenger).filter_by(first_name = first_name, last_name = last_name).all()[0]
     #select ORIGIN:
     print("\nFlight Origin.")
-    for city in cities:
-        print(f'-{city}')
+    print(city_airport_list)
     origin = input("Where are you flying from?: ")
     #NEED: add loop for if user enters invalid city name
     if origin in cities: 

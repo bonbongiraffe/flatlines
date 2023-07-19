@@ -117,8 +117,6 @@ class Pilot(Base):
 
     flights = relationship('Flight', backref= 'pilot')
     
-
-
     def __repr__(self): 
         return f'<Pilot id: {self.id}, ' + \
             f'first_name: {self.first_name} '+ \
