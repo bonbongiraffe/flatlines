@@ -1,6 +1,7 @@
 from sqlalchemy import ForeignKey, Column, Integer, String, MetaData
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, relationship
 
@@ -12,6 +13,9 @@ class Passenger(Base):
     id = Column( Integer() , primary_key = True )
     first_name = Column( String() )
     last_name = Column( String() )
+
+    reservations = relationship('Reservation', backref='passenger')
+    flights = association_proxy( 'reservations', 'flight' )
 
     def __repr__( self ):
         return f'id: {self.id}, ' + \
@@ -26,7 +30,7 @@ class Flight(Base):
     destination = Column( String() )
 
     reservations = relationship('Reservation', backref='flight')
-    passengers = relationship('Passenger', backref='flight')
+    passengers = association_proxy( 'reservations', 'passenger' )
 
     @property #returns a list of seat numbers from 1 to 20 ommitting taken seats based on existing reservations
     def open_seats(self):

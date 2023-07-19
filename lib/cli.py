@@ -46,7 +46,7 @@ if __name__ == '__main__':
         current_passenger = session.query(Passenger).filter_by(first_name = first_name, last_name = last_name).all()[0]
         print("\nFlight Origin.")
         for city in cities:
-            print(city)
+            print(f'-{city}')
         origin = input("Where are you flying from?: ")
         #NEED: add loop for if user enters invalid city name
         if origin in cities: 
@@ -54,7 +54,7 @@ if __name__ == '__main__':
         print("\nFlight Destination.")
         for city in cities:
             if city != origin:
-                print(city)
+                print(f'-{city}')
         destination = input("Where would you like to fly to?: ")
         #NEED: add loop for if user enters invalid city name
             #fetch matching flight
