@@ -5,7 +5,7 @@ from sqlalchemy import ForeignKey, Column, Integer, String, MetaData
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models import Flight, Base
-from assets import airport_dict
+from assets import airport_dict[0]
 import ipdb
 
 engine = create_engine('sqlite:///airline.db')

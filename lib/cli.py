@@ -14,10 +14,9 @@ if __name__ == '__main__':
     session = Session()
 
 #ASSETS:
-from assets import logo, seating_legend
-from flights import airport_dict
-cities = airport_dict.keys()
-airports = airport_dict.values()
+from assets import logo, seat_legend, airport_dict
+cities = airport_dict[0].keys()
+airports = airport_dict[0].values()
 
 if __name__ == '__main__':
     print(f"""
@@ -60,7 +59,7 @@ if __name__ == '__main__':
             #fetch matching flight
         current_flight = session.query(Flight).filter_by(origin = origin, destination = destination).all()[0]
             #print seating chart
-        print(seating_legend)
+        print(seat_legend)
         print(current_flight.seat_chart)
             #prompt user for seat number
         seat_number = input("Please enter your seat number: ")
@@ -70,20 +69,48 @@ if __name__ == '__main__':
         session.add(new_reservation)
         session.commit()
         print(f"Your reservation id is {new_reservation.id}. Thank you for flying with Flatlines!")
+        print("""
+        MENU
+        m - return to main menu
+        p - print reservation
+        x - exit
+        """)
+        user_input = input(">> ")
+        if user_input == "p":
+            print(new_reservation.ticket)
         #NEED: loop to starting menu
 
     #EDIT reservation
     if user_input == 'e':
         pass
+        #prompt user for reservation number
+        reservation_number = input("Please enter your reservation number: ")
+        current_reservation = session.query(Reservation).filter_by(id=reservation_number)
+        #fetch current_passenger... <-- reservation.passenger_id
+        current_passenger = session.query(Passenger).filter_by(id=current_reservation.passenger_id)
+        #fetch current_flight... <-- reservation.flight_id
+        current_flight = session.query(Flight).filter_by(id=current_reservation.flight_id)
+            #ipdb> print(current_flight.seat_chart)
         #display reservation information to user
+        print(f"Flight Origin: {current_flight.origin}")
+        print(f"Flight Destination: {current_flight.destination}")
+        print(f"Seat Number: {current_reservation.seat_number}")
         #prompt user with options: CANCEL or EDIT
-        #EDIT
+        user_input = input("To edit, please enter 'e'. To cancel reservation, please enter 'CANCEL'")
+        if user_input == 'e':
+            pass
+            #EDIT
             #display seating chart
+            print(seat_legend)
+            print(current.flight.seat_chart)
             #prompt user for new seat number
-        #CANCEL
+        if user_input == 'CANCEL':
+            pass        
+            #CANCEL
             #prompt user "are you sure? y/n"
             #delete if y
             #return to options if n
+        #NEED: loop if user didn't enter 'e' or 'CANCEL'
         #NEED: loop to starting menu
 
     elif user_input != "x" :

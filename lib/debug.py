@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
+from assets import *
 from models import Passenger, Flight, Reservation
 
 if __name__ == '__main__':
