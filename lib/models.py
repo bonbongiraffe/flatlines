@@ -25,7 +25,8 @@ class Flight(Base):
     origin = Column( String() )
     destination = Column( String() )
 
-    reservations = relationship('Reservation', backref = 'flight')
+    reservations = relationship('Reservation', backref='flight')
+    passengers = relationship('Passenger', backref='flight')
 
     @property #returns a list of seat numbers from 1 to 20 ommitting taken seats based on existing reservations
     def open_seats(self):
