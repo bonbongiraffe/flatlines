@@ -82,33 +82,42 @@ if __name__ == '__main__':
 
     #EDIT reservation
     if user_input == 'e':
-        pass
         #prompt user for reservation number
         reservation_number = input("Please enter your reservation number: ")
-        current_reservation = session.query(Reservation).filter_by(id=reservation_number)
+        current_reservation = session.query(Reservation).filter_by(id=reservation_number).first()
         #fetch current_passenger... <-- reservation.passenger_id
-        current_passenger = session.query(Passenger).filter_by(id=current_reservation.passenger_id)
+        if current_reservation:
+            current_passenger = session.query(Passenger).filter_by(id=current_reservation.passenger_id).first()
         #fetch current_flight... <-- reservation.flight_id
-        current_flight = session.query(Flight).filter_by(id=current_reservation.flight_id)
+            current_flight = session.query(Flight).filter_by(id=current_reservation.flight_id).first()
             #ipdb> print(current_flight.seat_chart)
         #display reservation information to user
-        print(f"Flight Origin: {current_flight.origin}")
-        print(f"Flight Destination: {current_flight.destination}")
-        print(f"Seat Number: {current_reservation.seat_number}")
+            print(f"Flight Origin: {current_flight.origin}")
+            print(f"Flight Destination: {current_flight.destination}")
+            print(f"Seat Number: {current_reservation.seat_number}")
         #prompt user with options: CANCEL or EDIT
-        user_input = input("To edit, please enter 'e'. To cancel reservation, please enter 'CANCEL'")
-        if user_input == 'e':
-            pass
+            user_input = input("To edit, please enter 'e'. To cancel reservation, please enter 'CANCEL'")
+            if user_input == 'e':
             #EDIT
             #display seating chart
-            print(seat_legend)
-            print(current.flight.seat_chart)
+                print(seat_legend)
+                print(current_flight.seat_chart)
             #prompt user for new seat number
+                new_seat_number = input("Please enter the new seat number: ")
+                current_reservation.seat_number = new_seat_number
+                session.commit()
+                print('Seat number updated successfully')
         if user_input == 'CANCEL':
-            pass        
             #CANCEL
             #prompt user "are you sure? y/n"
+            confirmation = input('Are you sure you want to cancel this reservation ? (y/n): ')
+            if confirmation.lower() == 'y':
             #delete if y
+                session.delete(current_reservation)
+                session.commit()
+                print("Reservation canceled successfully.")
+            else:
+                print("Reservation cancellation canceled.")
             #return to options if n
         #NEED: loop if user didn't enter 'e' or 'CANCEL'
         #NEED: loop to starting menu
