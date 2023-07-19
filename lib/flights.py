@@ -3,6 +3,7 @@ from sqlalchemy import ForeignKey, Column, Integer, String, MetaData
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models import Flight, Base
+from assets import airport_dict
 import ipdb
 
 engine = create_engine('sqlite:///airline.db')
@@ -10,13 +11,10 @@ Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
 
-airport_dict = {
-        "New York City": "JFK",
-        "Chicago": "ORD",
-        "Miami": "MIA",
-        "Denver": "DEN",
-        "Los Angeles": "LAX"
-    }
+test = [1,2,4,5,6,9,10,11,14,16,17,19]
+def seat_chart( seat_list ):
+    for i in range(1,20):
+        print(i)
 
 if __name__ == '__main__':
     for origin_city, origin_airport in airport_dict.items():
