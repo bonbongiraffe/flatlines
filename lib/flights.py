@@ -1,20 +1,17 @@
+# Code for seeding flights table with all possible flights between existing airports
+
 import sqlite3
 from sqlalchemy import ForeignKey, Column, Integer, String, MetaData
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models import Flight, Base
-from assets import airport_dict
+from assets import airport_dict[0]
 import ipdb
 
 engine = create_engine('sqlite:///airline.db')
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
-
-test = [1,2,4,5,6,9,10,11,14,16,17,19]
-def seat_chart( seat_list ):
-    for i in range(1,20):
-        print(i)
 
 if __name__ == '__main__':
     for origin_city, origin_airport in airport_dict.items():
