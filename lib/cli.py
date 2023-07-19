@@ -2,16 +2,13 @@
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
-from models import Passenger, Flight, Reservation
+from models import Passenger, Flight, Reservation, Pilot, session
 #from sqlalchemy.ext.declarative import declarative_base
 
-Base = declarative_base()
 
-if __name__ == '__main__':
-    engine = create_engine('sqlite:///airline.db')
-    Base.metadata.create_all(engine)
-    Session = sessionmaker(bind=engine)
-    session = Session()
+
+
+
 
 #ASSETS:
 from assets import logo, seating_legend
@@ -27,7 +24,9 @@ if __name__ == '__main__':
     ----------------------
     MENU
     - to create a new reservation, please enter: 'create' 
-    - to edit an existing reservation, please enter your reservation number. 
+    - to edit an existing reservation, please enter your reservation number.
+    - to register as new pilot, type in secret password.
+    - to enter pilot-only options, please enter pilot id.
     """)
     user_input = input('>> ')
         #creating reservation
@@ -86,6 +85,21 @@ if __name__ == '__main__':
             #prompt user "are you sure? y/n"
             #delete if y
             #return to options if n
+    
+    if user_input == 'const [torture, setTorture] = useState(SqlAlchemy)':
+        print ("We see that you have gained the secret password.... and you have successfully joined flatiron airlines!")
+        print("enter your first name, last name, and a personal id number.")
+        first_name = input("Enter First Name: ")
+        last_name = input("Enter Last Name: ")
+        id = input("Enter id number: ")
+
+        new_pilot = Pilot(first_name = first_name, last_name = last_name, id = id)
+        session.add(new_pilot)
+        session.commit()
+
+    
+
+
 
     elif user_input != "x" :
         user_input = input('>> ')
