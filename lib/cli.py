@@ -33,8 +33,8 @@ if __name__ == '__main__':
     #CREATE reservation
     if user_input == 'c':
         print("For returning users, please enter your first and last name exactly as you did for previous reservations. *Not case sensitive")
-        first_name = input("Please enter your first name: ").lower()
-        last_name = input("Please enter your last name: ").lower()
+        first_name = input("Please enter your first name: ").rstrip().lower()
+        last_name = input("Please enter your last name: ").rstrip().lower()
         if len(session.query(Passenger).filter_by(first_name = first_name, last_name = last_name).all()) == 1:
             print(f"Welcome back {first_name.capitalize()} {last_name.capitalize()}.")
         else:
