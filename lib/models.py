@@ -23,6 +23,10 @@ class Passenger(Base):
     reservations = relationship('Reservation', backref='passenger')
     flights = association_proxy( 'reservations', 'flight' )
 
+    @property
+    def name(self):
+        return f"{self.first_name.capitalize()} {self.last_name.capitalize()}"
+
     def __repr__( self ):
         return f'(id: {self.id}, ' + \
             f'first_name: {self.first_name}, ' + \
@@ -78,8 +82,8 @@ class Reservation(Base):
     flight_id = Column( Integer(), ForeignKey('flights.id') )
     seat_number = Column( Integer() )
 
-    # passenger <-- usable, backref from Passenger
-    # flight <-- usable, backref from Flight
+    # passenger <-- usable property, backref from Passenger
+    # flight <-- usable property, backref from Flight
 
     @property #returns the string-formatted boarding ticket with all reservation information
     def ticket(self):
@@ -95,7 +99,7 @@ class Reservation(Base):
     |   // FLATLINES  
     |
     |      {passenger_name} 
-    |      Seat: {seat_number}                     
+    |      Seat: {f"{seat_number:02}"}                     
     |   {origin_city} ({origin_airport}) -->
     |   {destination_city} ({destination_airport})
     |___________________________________   
@@ -116,13 +120,16 @@ class Pilot(Base):
     last_name = Column(String(), )
 
     flights = relationship('Flight', backref= 'pilot')
+
+    @classmethod
+    def ids(cls):
+        id_list = session.query(Pilot.id).all()[0]
+        return id_list
     
-
-
     def __repr__(self): 
         return f'<Pilot id: {self.id}, ' + \
-            f'first_name: {self.first_name} '+ \
-            f'last_name: {self.last_name} ' + \
+            f'first_name: {self.first_name}, '+ \
+            f'last_name: {self.last_name}, ' + \
             f'flights: {self.flights}>'
     
 
