@@ -43,6 +43,18 @@ class Flight(Base):
     reservations = relationship('Reservation', backref='flight') #--> [{reservation_obj1...},{reservation_obj2...}]
     passengers = association_proxy( 'reservations', 'passenger' )
 
+    @property
+    def passenger_ids(self):
+        return [passenger.id for passenger in self.passengers]
+
+    @property 
+    def passenger_list(self):
+        output_string = f"\nFirst Name\tLast Name\t\tPassenger ID\n"
+        for passenger in self.passengers:
+            passenger_info = f"{passenger.first_name}\t{passenger.last_name}\t\t{passenger.id}\n"
+            output_string += passenger_info
+        return output_string
+
     @property #returns a list of seat numbers from 1 to 20 ommitting taken seats based on existing reservations
     def open_seats(self):
         taken_list = [reservation.seat_number for reservation in self.reservations] #--> [17,18]
@@ -70,8 +82,8 @@ class Flight(Base):
     def __repr__( self ):
         return f'(id: {self.id}, ' + \
             f'origin: {self.origin}, ' + \
-            f'destination: {self.destination}' + \
-            f'pilot: {self.pilot}'
+            f'destination: {self.destination}, ' + \
+            f'pilot_id: {self.pilot_id})'
     
 
 class Reservation(Base):
@@ -120,6 +132,22 @@ class Pilot(Base):
     last_name = Column(String(), )
 
     flights = relationship('Flight', backref= 'pilot')
+
+    @property
+    def flight_ids(self):
+        return [flight.id for flight in self.flights]
+
+    @property
+    def flight_list(self):
+        flights_string = "\nOrigin\tDestination\tFlight ID\n"
+        for flight in self.flights:
+            flight_info = f"{flight.origin}\t{flight.destination}\t\t{flight.id}\n"
+            flights_string += flight_info
+        return flights_string
+
+    @property
+    def name(self):
+        return f"{self.first_name.capitalize()} {self.last_name.capitalize()}"
 
     @classmethod
     def ids(cls):
