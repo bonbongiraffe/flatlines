@@ -11,7 +11,7 @@ airports = airport_dict[0].values()
 
 #Validations:
 def validate_string(input=""):
-    special_characters = """ "!@#$%^&*()-=_+[]}{\|/?.>,<`~';: """
+    special_characters = """"!@#$%^&*()-=_+[]}{\|/?.>,<`~';:"""
     if input == "":
         print("Input cannot be empty string.")
         return False
@@ -28,10 +28,29 @@ def validate_name(name=""):
     if not validate_string(name):
         return False
     elif 2 <= len(name) <= 12:
+        return True
+    else:
         print("Name must be between 2 and 12 characters.")
         return False
-    else:
+
+def validate_airport(input):
+    if not validate_string(input):
+        return False
+    if input in airport_dict[0].keys() or input.upper() in airport_dict[0].values():
         return True
+    else:
+        print("Airport not found in database.")
+        return False
+
+def check_airport(input): #allowing user to input either city or airport 
+    #converts city to corresponding airport
+    if input in airport_dict[0].keys():
+        return airport_dict[0][input]
+    #checks and returns airport 
+    elif input.upper() in airport_dict[0].values():
+        return input.upper()
+    else:
+        print("Airport not found in database.")
 
 #MAIN menu
 def main_menu():
@@ -73,7 +92,7 @@ def create_reservation():
             break
     #welcome back: for existing customers
     if len(session.query(Passenger).filter_by(first_name = first_name, last_name = last_name).all()) == 1:
-        print(f"Welcome back {first_name.capitalize()} {last_name.capitalize()}.")
+        print(f"\nWelcome back {first_name.capitalize()} {last_name.capitalize()}.")
     #welcome to: for new customers
     else:
         new_passenger = Passenger(first_name = first_name, last_name = last_name)
@@ -84,25 +103,39 @@ def create_reservation():
     current_passenger = session.query(Passenger).filter_by(first_name = first_name, last_name = last_name).all()[0]
     #select ORIGIN:
     print("\nFlight Origin.")
-    print(city_airport_list)
-    origin = input("Where are you flying from?: ")
-    #NEED: add loop for if user enters invalid city name
-    if origin in cities: 
-        origin = airport_dict[origin]
+    print(city_airport_list())
+    print(airport_dict[0].keys())
+    print(airport_dict[0].values())
+    while True:
+        origin = input("Where are you flying from?: ").capitalize()
+        if validate_airport(origin):
+            origin = check_airport(origin)
+            break
+    #select DESTINATION:
     print("\nFlight Destination.")
-    for city in cities:
-        if city != origin:
-            print(f'-{city}')
-    destination = input("Where would you like to fly to?: ")
-    #NEED: add loop for if user enters invalid city name
-        #fetch matching flight
+    print(city_airport_list(origin))
+    while True:
+        destination = input("Where would you like to fly to?: ").capitalize()
+        if validate_airport(destination):
+            destination = check_airport(destination)
+            if destination == origin:
+                print("Destination cannot match origin.")
+                continue
+            else:
+                break
+    #fetch matching flight
     current_flight = session.query(Flight).filter_by(origin = origin, destination = destination).all()[0]
-        #print seating chart
+    #print seating chart
     print(seat_legend)
     print(current_flight.seat_chart)
-        #prompt user for seat number
-    seat_number = input("Please enter your seat number: ")
-        #create new reservation
+    #prompt user for seat number
+    while True:
+        seat_number = input("Please enter your seat number: ")
+        if seat_number in current_flight.open_seats:
+            break
+        else:
+            print("Invalid selection, please try again.")
+    #create new reservation
     new_reservation = Reservation(passenger_id = current_passenger.id, flight_id = current_flight.id, seat_number = seat_number)    
     print(new_reservation)
     session.add(new_reservation)
@@ -114,9 +147,17 @@ def create_reservation():
     p - print reservation
     x - exit
     """)
-    user_input = input(">> ")
-    if user_input == "p":
-        print(new_reservation.ticket)
+    menu_dict = {
+        "m": main_menu,
+        "p": lambda  :print(new.reservation.ticket)
+    }
+    while True:
+        user_input = input(">> ")
+        if user_input in menu_dict.keys():
+            menu_dict[user_input]()
+        elif user_input == 'x':
+            print("Exiting application. Hope to see you again soon!")
+            break
     #NEED: loop to starting menu
 
 #EDIT reservation
@@ -143,9 +184,9 @@ def edit_reservation():
         while True:
     #prompt user with options: CANCEL or EDIT
             user_input = input("""
-e - To edit your reservation
-CANCEL - To cancel your reservation
-x - To exit to main menu 
+    e - To edit your reservation
+    CANCEL - To cancel your reservation
+    x - To exit to main menu 
                                """)
             if user_input == 'e':
         #EDIT

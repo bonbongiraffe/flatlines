@@ -73,7 +73,7 @@ def city_airport_list ( origin_airport=None ):
     ca_list = ""
     for city in airport_dict[0]:
         if origin_airport != None:
-            if airport_dict[1][city] == origin_airport:
+            if airport_dict[0][city] == origin_airport:
                 continue
-        ca_list += f"-{city} ({airport_dict[1][city]})\n"
+        ca_list += f"-{city} ({airport_dict[0][city]})\n"
     return ca_list
