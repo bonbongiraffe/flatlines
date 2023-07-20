@@ -70,8 +70,8 @@ class Flight(Base):
     def __repr__( self ):
         return f'(id: {self.id}, ' + \
             f'origin: {self.origin}, ' + \
-            f'destination: {self.destination}' + \
-            f'pilot: {self.pilot}'
+            f'destination: {self.destination}, ' + \
+            f'pilot_id: {self.pilot_id})'
     
 
 class Reservation(Base):
