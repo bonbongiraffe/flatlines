@@ -27,8 +27,8 @@ airport_dict = [
             "LAX": "Los Angeles"
         }
     ] 
-
-#2. Menu:
+cities = airport_dict[0].keys()
+airports = airport_dict[0].values()
 
 #3. Flat-Line logo:
 logo = """
@@ -77,3 +77,47 @@ def city_airport_list ( origin_airport=None ):
                 continue
         ca_list += f"-{city} ({airport_dict[0][city]})\n"
     return ca_list
+
+#Validations:
+def validate_string(input=""):
+    special_characters = """"!@#$%^&*()-=_+[]}{\|/?.>,<`~';:"""
+    numbers = "1234567890"
+    if input == "":
+        print("Input cannot be empty string.")
+        return False
+    if any(c in special_characters for c in input):
+        print("Input cannot contain special characters.")
+        return False
+    elif any(c in numbers for c in input):
+        print("Input cannot contain numbers.")
+        return False
+    else: 
+        return True
+
+def validate_name(name=""):
+    if not validate_string(name):
+        return False
+    elif 2 <= len(name) <= 12:
+        return True
+    else:
+        print("Name must be between 2 and 12 characters.")
+        return False
+
+def validate_airport(input):
+    if not validate_string(input):
+        return False
+    if input.title() in airport_dict[0].keys() or input.upper() in airport_dict[0].values():
+        return True
+    else:
+        print("Airport not found in database.")
+        return False
+
+def check_airport(input): #allowing user to input either city or airport 
+    #converts city to corresponding airport
+    if input.title() in airport_dict[0].keys():
+        return airport_dict[0][input.title()]
+    #checks and returns airport 
+    elif input.upper() in airport_dict[0].values():
+        return input.upper()
+    else:
+        print("Airport not found in database.")
