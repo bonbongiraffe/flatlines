@@ -49,9 +49,11 @@ class Flight(Base):
 
     @property 
     def passenger_list(self):
-        output_string = f"\nFirst Name\tLast Name\t\tPassenger ID\n"
-        for passenger in self.passengers:
-            passenger_info = f"{passenger.first_name}\t{passenger.last_name}\t\t{passenger.id}\n"
+        headers = ["First Name", "Last Name", "Passenger ID","Seat #"]
+        output_string = f"\n{headers[0]:<13}{headers[1]:<13}{headers[2]:^13}{headers[3]:^13}\n"
+        for reservation in self.reservations:
+            passenger = session.query(Passenger).filter_by(id=reservation.passenger_id).first()
+            passenger_info = f"{passenger.first_name:<13}{passenger.last_name:<13}{passenger.id:^13}{reservation.seat_number:^13}\n"
             output_string += passenger_info
         return output_string
 

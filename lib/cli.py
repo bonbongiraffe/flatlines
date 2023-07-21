@@ -48,13 +48,13 @@ def create_reservation():
             break
     #welcome back: for existing customers
     if len(session.query(Passenger).filter_by(first_name = first_name, last_name = last_name).all()) == 1:
-        print(f"\nWelcome back {first_name.capitalize()} {last_name.capitalize()}.")
+        print(f"\nWelcome back, {first_name.capitalize()} {last_name.capitalize()}.")
     #welcome to: for new customers
     else:
         new_passenger = Passenger(first_name = first_name, last_name = last_name)
         session.add(new_passenger)
         session.commit()
-        print(f"Welcome to Flat-lines, {first_name.capitalize()} {last_name.capitalize()}.")
+        print(f"\nWelcome to Flat-lines, {first_name.capitalize()} {last_name.capitalize()}.")
     #set current passenger
     current_passenger = session.query(Passenger).filter_by(first_name = first_name, last_name = last_name).all()[0]
     #select ORIGIN:
@@ -264,7 +264,7 @@ def pilot_cancel_reservation(logged_in_flight):
 def pilot_edit_flight(logged_in_pilot, flight_id):
     pilot = logged_in_pilot
     flight = session.query(Flight).filter_by(id=flight_id).first()
-    print(flight)
+    print("Flight Information:\n",flight)
     menu_dict = {
         "s": pilot_print_flight_info,
         "e": pilot_cancel_reservation,
@@ -280,7 +280,6 @@ def pilot_edit_flight(logged_in_pilot, flight_id):
         if user_input in menu_dict:
             menu_dict[user_input](flight)
         elif user_input == 'x':
-            print("Exiting application. Hope to see you again soon!")
             break
         else:
             print("Invalid menu option. Please try again.")
@@ -311,7 +310,6 @@ def pilot_menu(logged_in_pilot):
     menu_dict = {
         "f": pilot_print_flights,
         "e": pilot_select_flight,
-        "m": main_menu
     }
     while True:
         print("""
@@ -324,7 +322,6 @@ def pilot_menu(logged_in_pilot):
         if user_input in menu_dict:
             menu_dict[user_input](pilot)
         elif user_input == 'x':
-            print("Exiting application. Hope to see you again soon!")
             break
         else:
             print("Invalid menu option. Please try again.")
