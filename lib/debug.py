@@ -9,4 +9,6 @@ if __name__ == '__main__':
     Session = sessionmaker(bind=engine)
     session = Session()
 
+    #print(session.query(Flight).filter_by(id=3).first().passenger_list)
+
     import ipdb; ipdb.set_trace()
