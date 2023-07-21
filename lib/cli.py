@@ -35,7 +35,7 @@ def main_menu(*args):
 #USER register/login
 def user_register_login():
     menu_dict = {
-        "r": lambda  :print("register new user")
+        "r": lambda  :print("register new user"),
         "l": lambda  :print("existing user login")
     }
     print("""
@@ -119,8 +119,9 @@ def create_reservation(logged_in_user=None):
     x - exit application
     """)
     menu_dict = {
-        "m": main_menu,
+        # "m": main_menu,
         "p": lambda  :print(new_reservation.ticket, """
+        m - return to main menu
         p - print reservation again
         x - exit application
             """)
@@ -129,6 +130,9 @@ def create_reservation(logged_in_user=None):
         user_input = input(">> ")
         if user_input in menu_dict.keys():
             menu_dict[user_input]()
+        elif user_input == 'm':
+            main_menu()
+            break
         elif user_input == 'x':
             print("Exiting application. Hope to see you again soon!")
             break
