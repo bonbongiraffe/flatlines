@@ -113,7 +113,7 @@ class Reservation(Base):
     |   // FLATLINES  
     |
     |      {passenger_name} 
-    |      Seat: {f"{seat_number:02}"} / Reservation#: {f"{self.id:05}"}                 
+    |   Seat: {f"{seat_number:02}"} / Reservation#: {f"{self.id:05}"}                 
     |   {origin_city} ({origin_airport}) -->
     |   {destination_city} ({destination_airport})
     |___________________________________   

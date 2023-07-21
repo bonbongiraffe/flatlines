@@ -104,14 +104,13 @@ def create_reservation():
     Please select from the following menu options:
     m - return to main menu
     p - print reservation
-    x - exit
+    x - exit application
     """)
     menu_dict = {
         "m": main_menu,
         "p": lambda  :print(new_reservation.ticket, """
-        m - return to main menu
         p - print reservation again
-        x - exit
+        x - exit application
             """)
     }
     while True:
