@@ -32,8 +32,20 @@ def main_menu(*args):
         else:
             print("Invalid menu option. Please try again.")
 
+#USER register/login
+def user_register_login():
+    menu_dict = {
+        "r": lambda  :print("register new user")
+        "l": lambda  :print("existing user login")
+    }
+    print("""
+        Please select from the following menu options:
+        r - register as new user
+        l - 
+    """)
+
 #CREATE reservation
-def create_reservation():
+def create_reservation(logged_in_user=None):
     #prompt user for name
     print("For returning users, please enter your first and last name exactly as you did for previous reservations. *Not case sensitive")
     while True:
