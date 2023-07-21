@@ -116,21 +116,19 @@ def create_reservation(logged_in_user=None):
     Please select from the following menu options:
     m - return to main menu
     p - print reservation
-    x - exit
+    x - exit application
     """)
     menu_dict = {
         "m": main_menu,
         "p": lambda  :print(new_reservation.ticket, """
-        m - return to main menu
         p - print reservation again
-        x - exit
+        x - exit application
             """)
     }
     while True:
         user_input = input(">> ")
         if user_input in menu_dict.keys():
             menu_dict[user_input]()
-            break
         elif user_input == 'x':
             print("Exiting application. Hope to see you again soon!")
             break
@@ -174,14 +172,14 @@ def change_seat(existing_reservation):
             session.commit()
             print(current_reservation.ticket)
             print("Seat number updated successfully")
-            main_menu()
+            break
 
 #CANCEL reservation
 def cancel_reservation(existing_reservation):
     while True:
         confirmation = input('Are you sure you want to cancel this reservation ? (y/n): ')
         if confirmation.lower() == 'y':
-            session.delete(current_reservation)
+            session.delete(existing_reservation)
             session.commit()
             print("Reservation canceled successfully.")
             break
@@ -198,11 +196,6 @@ def edit_reservation(existing_reservation=None):
         current_reservation = find_reservation()
     else:
         current_reservation = existing_reservation
-    # #fetch current_passenger... <-- reservation.passenger_id
-    # current_passenger = current_reservation.passenger
-    # #fetch current_flight... <-- reservation.flight_id
-    # current_flight = current_reservation.flight
-
     #display reservation information to user
     print(current_reservation.ticket)
 
@@ -223,6 +216,7 @@ def edit_reservation(existing_reservation=None):
         user_input = input(">> ")
         if user_input in menu_dict:
             menu_dict[user_input](current_reservation)
+            break
         elif user_input == 'x':
             print("Exiting application. Hope to see you again soon!")
             break
