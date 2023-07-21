@@ -9,10 +9,6 @@ Book your flight with Flatlines from a growing list of airports (currently opera
 3. cd into `/lib` directory
 4. run the command `python cli.py` in your terminal to start application
 
-## Stretch Goals: 
-- pilot can eject passengers
-- emergency exit row in seating chart
-
 ## Features
 1. CLI structure:
     - main menu:
@@ -51,6 +47,7 @@ Book your flight with Flatlines from a growing list of airports (currently opera
 
 ## Next Steps:
 - Option to export boarding pass to .txt file with File i/o functions
+- Emergency exit row in seating chart
 - Algorithm to concert passenger id and reservation id to unique hashes
 - Admin portal for creating flights and assigning pilots to flights
 - Adding new airports and new cities
