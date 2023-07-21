@@ -46,6 +46,7 @@ Book your flight with Flatlines from a growing list of airports (currently opera
 - formatting interpolated strings
 
 ## Next Steps:
+- Factor all menu loops into general function
 - Option to export boarding pass to .txt file with File i/o functions
 - Emergency exit row in seating chart
 - Algorithm to concert passenger id and reservation id to unique hashes

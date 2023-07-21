@@ -6,9 +6,11 @@
 # 4. Seat Legend
 # 5. Seat Template
 # 6. Ticket Template
+# 7. City List
+# 8. Validations
 #############################
 
-#1: AIRPORTS and CITIES
+#1. Airport and City Dictionaries:
 airport_dict = [
         #[0]: city to airports
         {
@@ -29,6 +31,37 @@ airport_dict = [
     ] 
 cities = airport_dict[0].keys()
 airports = airport_dict[0].values()
+
+#2. Menu Function (wip):
+# need function objects with attributes: key_letter: 'c', description: 'create reservation', function: create_reservation
+    #i.e.: 
+        # m_create_reservation = {
+        #     "key_letter": "c",
+        #     "description": "create reservation",
+        #     "function": create_reservation
+        # }
+    # -> menu objs structured as above ^ 3 key:value pairs
+    # -> accepts 2 arguments: list of menu objs, list of arguments 
+    # -> constructs menu dict
+    # -> prints menu options
+    # -> loops user until valid menu selection is entered
+    # -> calls corresponding menu function with list of arguments
+def menu_constructor(menu_list,arg_list=[]):
+    menu_print = "Please select from the following menu options: "
+    menu_dict = {}
+    for menu_obj in menu_list:
+        menu_line = f"\n\t{menu_obj["key_letter"]} - {menu_obj["description"]}"
+        #build menu dict with (key) = key_letter , (value) = function
+        menu_dict[menu_obj["key_letter"]] = menu_obj["function"]
+        menu_print += menu_line
+    print(menu_print)
+    while True:
+        user_input = input(">> ")
+        if user_input in menu_dict.keys():
+            menu_dict[user_input](*arg_list)
+            break
+        else:
+            print("Invalid menu selection. Please try again.")
 
 #3. Flat-Line logo:
 logo = """
@@ -68,7 +101,7 @@ xx = Taken Seat
 
 #     """
 
-#7. City List - returns formatted list of cities with airports, optionally excluding an origin city/airport
+#7. City List: returns formatted list of cities with airports, optionally excluding an origin city/airport
 def city_airport_list ( origin_airport=None ):
     ca_list = ""
     for city in airport_dict[0]:
@@ -78,7 +111,7 @@ def city_airport_list ( origin_airport=None ):
         ca_list += f"-{city} ({airport_dict[0][city]})\n"
     return ca_list
 
-#Validations:
+#8. Validations:
 def validate_string(input=""):
     special_characters = """"!@#$%^&*()-=_+[]}{\|/?.>,<`~';:"""
     numbers = "1234567890"

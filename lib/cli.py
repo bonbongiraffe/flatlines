@@ -25,7 +25,6 @@ def main_menu(*args):
         user_input = input(">> ")
         if user_input in menu_dict:
             menu_dict[user_input]()
-            break
         elif user_input == 'x':
             print("Exiting application. Hope to see you again soon!")
             break
@@ -245,6 +244,7 @@ def pilot_password():
 
 #PILOT print flight seating chart and passenger list
 def pilot_print_flight_info(logged_in_flight):
+    print(f"\nFlight Information: \n{logged_in_flight}")
     print(logged_in_flight.seat_chart)
     print(logged_in_flight.passenger_list)
 
@@ -256,7 +256,7 @@ def pilot_cancel_reservation(logged_in_flight):
         print("No passengers to eject.")
         return
     while True:
-        print("Please enter a passenger to eject: ")
+        print("Please enter a passenger ID to eject: ")
         user_input = input(">> ")
         if user_input.isdigit():
             if int(user_input) in flight.passenger_ids:
@@ -316,7 +316,7 @@ def pilot_print_flights(logged_in_pilot):
 #PILOT menu
 def pilot_menu(logged_in_pilot):
     pilot = logged_in_pilot
-    print(f"Welcome back, {pilot.name}!")
+    print(f"\nWelcome back, {pilot.name}!")
     menu_dict = {
         "f": pilot_print_flights,
         "e": pilot_select_flight,
